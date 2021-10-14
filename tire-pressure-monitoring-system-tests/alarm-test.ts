@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import Alarm from '../tire-pressure-monitoring-system/alarm'
-import * as Sensor from '../tire-pressure-monitoring-system/sensor'
-import { ImportMock, MockManager } from 'ts-mock-imports'
+import SensorInterface from '../tire-pressure-monitoring-system/sensor-inteface'
+import { mock, when, instance } from 'ts-mockito'
 
 // - [x] Test alarm for normal pressure
 // - [x] Test alarm for high pressure
@@ -9,29 +9,39 @@ import { ImportMock, MockManager } from 'ts-mock-imports'
 
 describe('Tire Pressure Monitoring System', () => {
     describe('Alarm ', () => {
-        let mockedSensor: MockManager<Sensor.default>
-        beforeEach(() => {
-            mockedSensor = ImportMock.mockClass(Sensor)
-        })
         it('default is OFF', () => {
-            const alarm = new Alarm()
+            const mockedSensor: SensorInterface = mock<SensorInterface>()
+
+            const alarm = new Alarm(instance(mockedSensor))
             expect(alarm.isAlarmOn()).to.equal(false)
         })
+
         it('is ON when high pressure (>21)', () => {
-            mockedSensor.mock('popNextPressurePsiValue', 22)
-            const alarm = new Alarm()
+            const mockedSensor: SensorInterface = mock<SensorInterface>()
+
+            when(mockedSensor.popNextPressurePsiValue()).thenReturn(22)
+
+            const alarm = new Alarm(instance(mockedSensor))
             alarm.check()
             expect(alarm.isAlarmOn()).to.equal(true)
         })
+
         it('is ON when low pressure (<17)', () => {
-            mockedSensor.mock('popNextPressurePsiValue', 16)
-            const alarm = new Alarm()
+            const mockedSensor: SensorInterface = mock<SensorInterface>()
+
+            when(mockedSensor.popNextPressurePsiValue()).thenReturn(16)
+
+            const alarm = new Alarm(instance(mockedSensor))
             alarm.check()
             expect(alarm.isAlarmOn()).to.equal(true)
         })
+
         it('is OFF when allowed pressure', () => {
-            mockedSensor.mock('popNextPressurePsiValue', 18)
-            const alarm = new Alarm()
+            const mockedSensor: SensorInterface = mock<SensorInterface>()
+
+            when(mockedSensor.popNextPressurePsiValue()).thenReturn(20)
+
+            const alarm = new Alarm(instance(mockedSensor))
             alarm.check()
             expect(alarm.isAlarmOn()).to.equal(false)
         })

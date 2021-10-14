@@ -1,16 +1,16 @@
-import Sensor from './sensor'
+import SensorInterface from './sensor-inteface'
 
 export default class Alarm {
     private highPressureThreshold: number
     private lowPressureThreshold: number
 
-    private sensor: Sensor
+    private sensor: SensorInterface
     private alarmOn: boolean
 
-    constructor() {
+    constructor(sensor: SensorInterface) {
         this.lowPressureThreshold = 17
         this.highPressureThreshold = 21
-        this.sensor = new Sensor()
+        this.sensor = sensor
         this.alarmOn = false
     }
 
