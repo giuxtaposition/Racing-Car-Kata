@@ -8,16 +8,13 @@ import { ImportMock, MockManager } from 'ts-mock-imports'
 // - [x] Test alarm for low pressure
 
 describe('Tire Pressure Monitoring System', () => {
-    let mockedSensor: MockManager<Sensor.default>
-    beforeEach(() => {
-        mockedSensor = ImportMock.mockClass(Sensor)
-    })
-
     describe('Alarm ', () => {
+        let mockedSensor: MockManager<Sensor.default>
+        beforeEach(() => {
+            mockedSensor = ImportMock.mockClass(Sensor)
+        })
         it('default is OFF', () => {
-            mockedSensor.mock('popNextPressurePsiValue', 18)
             const alarm = new Alarm()
-            alarm.check()
             expect(alarm.isAlarmOn()).to.equal(false)
         })
         it('is ON when high pressure (>21)', () => {
@@ -31,6 +28,12 @@ describe('Tire Pressure Monitoring System', () => {
             const alarm = new Alarm()
             alarm.check()
             expect(alarm.isAlarmOn()).to.equal(true)
+        })
+        it('is OFF when allowed pressure', () => {
+            mockedSensor.mock('popNextPressurePsiValue', 18)
+            const alarm = new Alarm()
+            alarm.check()
+            expect(alarm.isAlarmOn()).to.equal(false)
         })
     })
 })
