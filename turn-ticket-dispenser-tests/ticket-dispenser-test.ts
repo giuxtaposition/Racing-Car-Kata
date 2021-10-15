@@ -16,19 +16,20 @@ describe('Turn Ticket Dispenser', () => {
 
         when(mockedTurnNumberSequence.getNextTurnNumber()).thenReturn(13)
 
-        const dispenser = new TicketDispenser()
-        const ticket = dispenser.getTurnTicket(
+        const dispenser = new TicketDispenser(
             instance(mockedTurnNumberSequence)
         )
+        const ticket = dispenser.getTurnTicket()
         expect(ticket.getTurnNumber()).to.equal(13)
     })
 
     it('New ticket number is greater than previous ticket number', () => {
-        const turnNumberSequence: TurnNumberSequence = new TurnNumberSequence()
-        const dispenser = new TicketDispenser()
+        const turnNumberSequence: TurnNumberSequenceInterface =
+            new TurnNumberSequence()
+        const dispenser = new TicketDispenser(turnNumberSequence)
 
-        const previousTicket = dispenser.getTurnTicket(turnNumberSequence)
-        const newTicket = dispenser.getTurnTicket(turnNumberSequence)
+        const previousTicket = dispenser.getTurnTicket()
+        const newTicket = dispenser.getTurnTicket()
 
         expect(newTicket.getTurnNumber()).to.greaterThan(
             previousTicket.getTurnNumber()
@@ -38,11 +39,12 @@ describe('Turn Ticket Dispenser', () => {
     it('Using two dispenser: new ticket number is still greater than previous ticket number', () => {
         const turnNumberSequence: TurnNumberSequenceInterface =
             new TurnNumberSequence()
-        const dispenser = new TicketDispenser()
 
-        const previousTicket = dispenser.getTurnTicket(turnNumberSequence)
-        const otherDispenser = new TicketDispenser()
-        const newTicket = otherDispenser.getTurnTicket(turnNumberSequence)
+        const dispenser = new TicketDispenser(turnNumberSequence)
+        const previousTicket = dispenser.getTurnTicket()
+
+        const otherDispenser = new TicketDispenser(turnNumberSequence)
+        const newTicket = otherDispenser.getTurnTicket()
 
         expect(newTicket.getTurnNumber()).to.greaterThan(
             previousTicket.getTurnNumber()
