@@ -1,41 +1,55 @@
-import TelemetryClient from './telemetry-client';
-
+import {
+    TelemetryClientConnectionInterface,
+    TelemetryClientDataInterface,
+} from './telemetry-client-interface'
 export default class TelemetryDiagnosticControls {
-	private diagnosticChannelConnectionString: string;
+    private diagnosticChannelConnectionString: string
 
-	private telemetryClient: TelemetryClient;
-	private diagnosticInfo: string;
+    private telemetryClientConnection: TelemetryClientConnectionInterface
+    private telemetryClientData: TelemetryClientDataInterface
+    private diagnosticInfo: string
 
-	constructor() {
-		this.diagnosticChannelConnectionString = '*111#';
-		this.telemetryClient = new TelemetryClient();
-		this.diagnosticInfo = '';
-	}
+    constructor(
+        telemetryClientConnection: TelemetryClientConnectionInterface,
+        telemetryClientData: TelemetryClientDataInterface
+    ) {
+        this.diagnosticChannelConnectionString = '*111#'
+        this.telemetryClientConnection = telemetryClientConnection
+        this.telemetryClientData = telemetryClientData
+        this.diagnosticInfo = ''
+    }
 
-	public readDiagnosticInfo() {
-		return this.diagnosticInfo;
-	}
+    public readDiagnosticInfo() {
+        return this.diagnosticInfo
+    }
 
-	public writeDiagnosticInfo(newValue: string) {
-		this.diagnosticInfo = newValue;
-	}
+    public writeDiagnosticInfo(newValue: string) {
+        this.diagnosticInfo = newValue
+    }
 
-	public checkTransmission() {
-		this.diagnosticInfo = '';
+    public checkTransmission() {
+        this.diagnosticInfo = ''
 
-		this.telemetryClient.disconnect();
+        this.telemetryClientConnection.disconnect()
 
-		let retryLeft = 3;
-		while (this.telemetryClient.getOnlineStatus() === false && retryLeft > 0) {
-			this.telemetryClient.connect(this.diagnosticChannelConnectionString);
-			retryLeft -= 1;
-		}
+        let retryLeft = 3
+        while (
+            this.telemetryClientConnection.getOnlineStatus() === false &&
+            retryLeft > 0
+        ) {
+            this.telemetryClientConnection.connect(
+                this.diagnosticChannelConnectionString
+            )
+            retryLeft -= 1
+        }
 
-		if (this.telemetryClient.getOnlineStatus() === false) {
-			throw new Error('Unable to connect');
-		}
+        if (this.telemetryClientConnection.getOnlineStatus() === false) {
+            throw new Error('Unable to connect')
+        }
 
-		this.telemetryClient.send(this.telemetryClient.diagnosticMessage());
-		this.diagnosticInfo = this.telemetryClient.receive();
-	}
+        this.telemetryClientData.send(
+            this.telemetryClientData.diagnosticMessage()
+        )
+        this.diagnosticInfo = this.telemetryClientData.receive()
+    }
 }

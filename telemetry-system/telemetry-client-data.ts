@@ -1,35 +1,16 @@
-import TelemetryClientInterface from './telemetry-client-interface'
+import { TelemetryClientDataInterface } from './telemetry-client-interface'
 
-export default class TelemetryClient implements TelemetryClientInterface {
-    private onlineStatus: boolean
+export default class TelemetryClientData
+    implements TelemetryClientDataInterface
+{
     private diagnosticMessageResult: string
 
     constructor() {
-        this.onlineStatus = false
         this.diagnosticMessageResult = ''
     }
 
     public diagnosticMessage() {
         return 'AT#UD'
-    }
-
-    public getOnlineStatus() {
-        return this.onlineStatus
-    }
-
-    public connect(telemetryServerConnectionString: string) {
-        if (telemetryServerConnectionString === '') {
-            throw new Error('missing telemetryServerConnectionString parameter')
-        }
-
-        // simulate the operation on a real modem
-        const success = this.connectionEventsSimulator(1, 10) <= 8
-
-        this.onlineStatus = success
-    }
-
-    public disconnect() {
-        this.onlineStatus = false
     }
 
     public send(message: string) {
@@ -54,7 +35,6 @@ export default class TelemetryClient implements TelemetryClientInterface {
                 'BEP Test.................... -5\r\n' +
                 'Local Rtrn Count............ 00\r\n' +
                 'Remote Rtrn Count........... 00'
-
             return
         }
 
@@ -67,9 +47,9 @@ export default class TelemetryClient implements TelemetryClientInterface {
         if (this.diagnosticMessageResult === '') {
             // simulate a received message (just for illustration - not needed for this exercise)
             message = ''
-            const messageLength = this.connectionEventsSimulator(50, 110)
+            const messageLength = this.randomMessageSimulator(50, 110)
             for (let i = messageLength; i >= 0; --i) {
-                message += this.connectionEventsSimulator(40, 126).toString()
+                message += this.randomMessageSimulator(40, 126).toString()
             }
         } else {
             message = this.diagnosticMessageResult
@@ -78,9 +58,7 @@ export default class TelemetryClient implements TelemetryClientInterface {
 
         return message
     }
-
-    // simulate the operation on a real modem
-    private connectionEventsSimulator(min: number, max: number): number {
+    private randomMessageSimulator(min: number, max: number): number {
         const delta = max + 1 - min
         return min + Math.floor(delta * Math.random())
     }
