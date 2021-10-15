@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import TelemetryClientConnection from '../telemetry-system/telemetry-client-connection'
+import TelemetryClientData from '../telemetry-system/telemetry-client-data'
 
 describe('Telemetry System', () => {
     describe('TelemetryClientConnection', () => {
@@ -31,6 +32,20 @@ describe('Telemetry System', () => {
             telemetryClientConnection.connect('let me connect')
             telemetryClientConnection.disconnect()
             expect(telemetryClientConnection.getOnlineStatus()).to.equal(false)
+        })
+    })
+    describe('TelemetryClientData', () => {
+        it('On message send, receive a diagnostic message correctly', () => {
+            const telemetryClientData = new TelemetryClientData()
+            telemetryClientData.send('random message')
+            expect(telemetryClientData.receive()).not.to.equal('')
+        })
+        it('On empty message send, throws error', () => {
+            const telemetryClientData = new TelemetryClientData()
+
+            expect(
+                telemetryClientData.send.bind(telemetryClientData, '')
+            ).to.throw('missing message parameter')
         })
     })
 })
