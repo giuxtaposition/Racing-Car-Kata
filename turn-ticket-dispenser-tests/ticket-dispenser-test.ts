@@ -1,8 +1,9 @@
 import { expect } from 'chai'
 import 'mocha'
 import TicketDispenser from '../turn-ticket-dispenser/ticket-dispenser'
-import TurnNumberSequence from '../turn-ticket-dispenser/turn-number-sequence'
+import TurnNumberSequenceInterface from '../turn-ticket-dispenser/turn-number-sequence-interface'
 import { instance, mock, when } from 'ts-mockito'
+import TurnNumberSequence from '../turn-ticket-dispenser/turn-number-sequence'
 
 // - [x] Ask for ticket, receive ticket
 // - [x] New Ticked number is greater than last ticket number
@@ -10,8 +11,8 @@ import { instance, mock, when } from 'ts-mockito'
 
 describe('Turn Ticket Dispenser', () => {
     it('Ask for ticket, receive ticket with my number', () => {
-        const mockedTurnNumberSequence: TurnNumberSequence =
-            mock(TurnNumberSequence)
+        const mockedTurnNumberSequence: TurnNumberSequenceInterface =
+            mock<TurnNumberSequenceInterface>()
 
         when(mockedTurnNumberSequence.getNextTurnNumber()).thenReturn(13)
 
@@ -35,7 +36,8 @@ describe('Turn Ticket Dispenser', () => {
     })
 
     it('Using two dispenser: new ticket number is still greater than previous ticket number', () => {
-        const turnNumberSequence: TurnNumberSequence = new TurnNumberSequence()
+        const turnNumberSequence: TurnNumberSequenceInterface =
+            new TurnNumberSequence()
         const dispenser = new TicketDispenser()
 
         const previousTicket = dispenser.getTurnTicket(turnNumberSequence)
