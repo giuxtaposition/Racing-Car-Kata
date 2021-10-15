@@ -5,8 +5,8 @@ import TurnNumberSequence from '../turn-ticket-dispenser/turn-number-sequence'
 import { instance, mock, when } from 'ts-mockito'
 
 // - [x] Ask for ticket, receive ticket
-// - [ ] New Ticked number is greater than last ticket number
-// - [ ] New Ticket number is greater than last ticket number even when using two ticket dispensers
+// - [x] New Ticked number is greater than last ticket number
+// - [x] New Ticket number is greater than last ticket number even when using two ticket dispensers
 
 describe('Turn Ticket Dispenser', () => {
     it('Ask for ticket, receive ticket with my number', () => {
