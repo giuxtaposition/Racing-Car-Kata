@@ -7,7 +7,7 @@ export default class Race {
     private _results: DriverInterface[]
     private _driverNames: Map<DriverInterface, string>
 
-    constructor(name: string, results: DriverInterface[]) {
+    constructor(name: string, ...results: DriverInterface[]) {
         this._name = name
         this._results = results
         this._driverNames = new Map<DriverInterface, string>()
@@ -17,7 +17,11 @@ export default class Race {
     }
 
     public points(driver: DriverInterface) {
-        return this._points[this._results.indexOf(driver)]
+        return this._points[this.position(driver)]
+    }
+
+    private position(driver: DriverInterface) {
+        return this._results.indexOf(driver)
     }
 
     public driverName(driver: DriverInterface): string {
