@@ -3,10 +3,12 @@ import { TelemetryClientConnectionInterface } from './telemetry-client-interface
 export default class TelemetryClientConnection
     implements TelemetryClientConnectionInterface
 {
+    private numberOfConnectionTries: number
     private onlineStatus: boolean
 
     constructor() {
         this.onlineStatus = false
+        this.numberOfConnectionTries = 3
     }
 
     public getOnlineStatus() {
@@ -20,8 +22,19 @@ export default class TelemetryClientConnection
 
         // simulate the operation on a real modem
         const success = this.connectionEventsSimulator(1, 10) <= 8
+        this.reconnect(success, telemetryServerConnectionString)
 
         this.onlineStatus = success
+    }
+
+    private reconnect(
+        success: boolean,
+        telemetryServerConnectionString: string
+    ) {
+        if (!success && this.numberOfConnectionTries > 0) {
+            this.numberOfConnectionTries--
+            this.connect(telemetryServerConnectionString)
+        }
     }
 
     public disconnect() {
