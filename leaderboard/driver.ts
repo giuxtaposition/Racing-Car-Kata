@@ -1,4 +1,6 @@
-export default class Driver {
+import DriverInterface from './driverInterface'
+
+export default class Driver implements DriverInterface {
     private _name: string
     private _country: string
 

@@ -1,36 +1,26 @@
-import Driver from './driver'
-import SelfDrivingCar from './self-driving-car'
+import DriverInterface from './driverInterface'
 
 export default class Race {
     private _points: number[] = [25, 18, 15]
 
     private _name: string
-    private _results: Driver[]
-    private _driverNames: Map<Driver, string>
+    private _results: DriverInterface[]
+    private _driverNames: Map<DriverInterface, string>
 
-    constructor(name: string, results: Driver[]) {
+    constructor(name: string, results: DriverInterface[]) {
         this._name = name
         this._results = results
-        this._driverNames = new Map<Driver, string>()
+        this._driverNames = new Map<DriverInterface, string>()
         this._results.forEach(driver => {
-            let name = driver.name
-            if (driver instanceof SelfDrivingCar) {
-                name =
-                    'Self Driving Car - ' +
-                    driver.country +
-                    ' (' +
-                    driver.algorithmVersion +
-                    ')'
-            }
-            this._driverNames.set(driver, name)
+            this._driverNames.set(driver, driver.name)
         })
     }
 
-    public points(driver: Driver) {
+    public points(driver: DriverInterface) {
         return this._points[this._results.indexOf(driver)]
     }
 
-    public driverName(driver: Driver): string {
+    public driverName(driver: DriverInterface): string {
         return this._driverNames.get(driver) || ''
     }
 

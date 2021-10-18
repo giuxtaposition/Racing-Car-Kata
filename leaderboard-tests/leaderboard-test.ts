@@ -47,8 +47,6 @@ describe('Leaderboard: ', () => {
 
         const sampleLeaderboard = new Leaderboard([race1, race2, race3])
 
-        console.log(sampleLeaderboard.driverRankings())
-
         expect('Lewis Hamilton').to.equal(sampleLeaderboard.driverRankings()[0])
     })
 

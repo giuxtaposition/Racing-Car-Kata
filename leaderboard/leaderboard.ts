@@ -1,14 +1,14 @@
 import Race from './race'
 
 export default class Leaderboard {
-    private races: Race[]
+    private _races: Race[]
     constructor(races: Race[]) {
-        this.races = races
+        this._races = races
     }
 
     driverPoints() {
         const driverPoints = new Map<string, number>()
-        this.races.forEach(race => {
+        this._races.forEach(race => {
             race.results.forEach(driver => {
                 const name = race.driverName(driver)
                 const pastPoints: number = driverPoints.get(name) || 0
