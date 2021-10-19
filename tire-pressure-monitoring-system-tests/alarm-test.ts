@@ -10,9 +10,9 @@ import { mock, when, instance } from 'ts-mockito'
 describe('Tire Pressure Monitoring System', () => {
     describe('Alarm ', () => {
         it('default is OFF', () => {
-            const mockedSensor: SensorInterface = mock<SensorInterface>()
+            const dummySensor: SensorInterface = mock<SensorInterface>()
 
-            const alarm = new Alarm(instance(mockedSensor))
+            const alarm = new Alarm(dummySensor)
             expect(alarm.isAlarmOn()).to.equal(false)
         })
 
